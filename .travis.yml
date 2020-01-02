@@ -7,6 +7,25 @@ before_install:
    - docker build -t bobbiel/docker-react -f Dockerfile.dev . 
 
 script:
-#   -docker run -e CI=true bobbiel/docker-react npm run test
-   -docker run bobbiel/docker-react npm run test -- --coverage
+   -docker run -e CI=true bobbiel/docker-react npm run test
+#   -docker run bobbiel/docker-react npm run test -- --coverage
 
+deploy:
+   provider: elasticbeanstalk
+# look at the url created by beanstalk
+   region: "us-west-2"
+   app: docker-react
+   env: "Docker-react-env"
+#  look for services, s3 and look for the one created in this exercise
+   bucket_name: elasticbeanstalk-us-west-w-somenumber
+   bucket_path: "docker-react"
+   on: 
+      branch: master
+# search of iam in aws console, then users in the menu, add user, provide a name, programmatic access only
+# attach existing policies directly.   beanstalk, provides full access to AWS Elastic Beanstalk, create
+# secret key will show only 1 tine, copy acess key ID and secret
+# go into travis ci, project, settings - provide a name, then paste the keys.  do not display
+
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+     secure: "$AWS_SECRET_KEY" 
