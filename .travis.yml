@@ -7,4 +7,6 @@ before_install:
    - docker build -t bobbiel/docker-react -f Dockerfile.dev . 
 
 script:
-   -docker run -e CI=true bobbiel/docker-react npm run test
+#   -docker run -e CI=true bobbiel/docker-react npm run test
+   -docker run bobbiel/docker-react npm run test -- --coverage
+
